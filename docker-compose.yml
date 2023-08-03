@@ -10,3 +10,6 @@ services:
       - database-data:/var/lib/postgresql/data/  # persist data
     ports:
       - '8778:5432'  # required to access DB from host system
+
+volumes:
+  database-data:
