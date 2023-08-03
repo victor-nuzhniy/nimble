@@ -5,6 +5,12 @@
 1. Create in the project root (or obtain from team member) an `.env` file with 
     environment variables required by application.
 
+### Performing commits
+
+1. Pre-commit hook installed, settings are in .pre-commit-config.yaml
+2. To instantiate new hook settings change .pre-commit-config.yaml file
+     and run     pre-commit install
+
 ### Local run in docker container using docker-compose
 
 1. Ensure `.env` file has at least `POSTGRES_USER`, `POSTGRES_PASSWORD` and 
