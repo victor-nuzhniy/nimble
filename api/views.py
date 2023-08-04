@@ -6,17 +6,17 @@ from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from api.schemas import contact_create_schema, contact_update_schema
-from api.utils import (
-    dictfetchall,
+from api.queries import (
     get_create_single_contact_query,
     get_delete_contacts_query,
     get_delete_single_contact_query,
     get_read_single_contact_query,
     get_select_contacts_query,
     get_update_single_contact_query,
-    validate_contact_input,
 )
+from api.schemas import contact_create_schema, contact_update_schema
+from api.utils import dictfetchall
+from api.validators import validate_contact_input
 
 
 @api_view(["GET"])

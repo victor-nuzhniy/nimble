@@ -4,7 +4,8 @@ import csv
 from django.core.management import BaseCommand
 from django.db import connection
 
-from api.utils import get_insert_contact_query, validate_contact
+from api.queries import get_insert_contact_query
+from api.validators import validate_contact
 
 
 class Command(BaseCommand):
