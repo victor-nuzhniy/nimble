@@ -13,6 +13,7 @@ from api.utils import (
     get_delete_contacts_query,
     get_delete_single_contact_query,
     get_read_single_contact_query,
+    get_select_contacts_query,
     get_update_single_contact_query,
     validate_contact_input,
 )
@@ -22,7 +23,7 @@ from api.utils import (
 @permission_classes([AllowAny])
 def get_contacts(request: Request) -> Response:
     """Get or delete contacts list data."""
-    query = "SELECT * FROM contacts"
+    query = get_select_contacts_query()
     with connection.cursor() as cursor:
         cursor.execute(query)
         contacts = dictfetchall(cursor)

@@ -38,6 +38,11 @@ def validate_contact_input(contact: Dict) -> bool:
     return True
 
 
+def get_select_contacts_query():
+    """Get query for retrievnig all contacts."""
+    return "SELECT * FROM contacts"
+
+
 def get_insert_contact_query(contact: Dict) -> str:
     """Get query string with SQL statement for creating contact."""
     return (
