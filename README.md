@@ -48,9 +48,15 @@ For work with application, you need to setup your database in docker container. 
        docker-compose up
 
 ### Redis
+
 1. We will use a celery that's in turn uses Redis. 
     To start a Redis server on port 6379, run the following command:
         docker run -p 6379:6379 -d redis:5
+
+### Celery
+
+1. To run celery use command in terminal
+    celery -A config worker -l info
 
 ### Performing tests
 
