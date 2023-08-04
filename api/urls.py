@@ -1,10 +1,9 @@
 """Urls list for 'api' app."""
-from django.urls import path, include
+from django.urls import path
 
-from api.views import contacts_json
-
-app_name = "api"
+from api.views import delete_contacts, get_contacts
 
 urlpatterns = [
-    path("contacts/json/", contacts_json, name="contacts_json"),
+    path("contacts/", get_contacts),
+    path("contacts/delete/", delete_contacts),
 ]
