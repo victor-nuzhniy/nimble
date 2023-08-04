@@ -32,3 +32,8 @@ def get_insert_contact_query(contact: Dict) -> str:
         f"('{contact.get('first name')}', '{contact.get('last name')}', "
         f"'{contact.get('Email')}');"
     )
+
+
+def get_delete_contacts_query() -> str:
+    """Get query string with SQL statement for deleting contacts."""
+    return "DELETE FROM contacts;"
