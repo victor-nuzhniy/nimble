@@ -2,6 +2,9 @@
 from typing import Dict, List
 
 import requests
+from django.db import connection
+
+from api.queries import get_insert_with_update_contacts_query
 
 
 def dictfetchall(cursor):
@@ -52,4 +55,7 @@ def get_nimble_api_data() -> List:
 
 def update_contacts_data(contacts: List) -> None:
     """Update contacts table data with given dict."""
-    pass
+    with connection.cursor() as cursor:
+        for contact in contacts:
+            query: str = get_insert_with_update_contacts_query(contact)
+            cursor.execute(query)
