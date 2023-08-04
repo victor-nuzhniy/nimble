@@ -48,3 +48,15 @@ def get_update_single_contact_query(
 def get_delete_single_contact_query(pk: int) -> str:
     """Get delete query to delete single contact."""
     return f"DELETE FROM contacts WHERE contact_id = {pk};"
+
+
+def get_insert_with_update_contacts_query(contact: Dict) -> str:
+    """Get insert query with on-conflict option with do update."""
+    return (
+        f"INSERT INTO contacts (first_name, last_name, email) "
+        f"VALUES ('{contact.get('first_name', '')}', "
+        f"'{contact.get('last_name', '')}', "
+        f"'{contact.get('email', '')}') "
+        f"ON CONFLICT (first_name, last_name) "
+        f"DO UPDATE SET email = '{contact.get('email', '')}';"
+    )
