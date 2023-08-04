@@ -24,6 +24,7 @@ class Migration(migrations.Migration):
              AS bigint START WITH 1 INCREMENT BY 1;
             ALTER TABLE contacts ALTER COLUMN contact_id
              SET DEFAULT nextval('contact_id_seq');
+            CREATE INDEX first_last_name_idx on contacts (first_name, last_name);
             """,
             """
             DROP TABLE contacts;
