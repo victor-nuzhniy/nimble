@@ -7,13 +7,13 @@ from django.db import connection
 from api.queries import get_insert_with_update_contacts_query
 
 
-def dictfetchall(cursor):
+def dictfetchall(cursor) -> List[Dict]:
     """
     Return all rows from a cursor as a dict.
 
     Assume the column names are unique.
     """
-    columns = [col[0] for col in cursor.description]
+    columns: List = [col[0] for col in cursor.description]
     return [dict(zip(columns, row)) for row in cursor.fetchall()]
 
 

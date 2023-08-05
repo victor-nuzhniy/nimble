@@ -1,4 +1,6 @@
 """Module with view funtion for 'api' app."""
+from typing import Dict, List, Optional
+
 from django.db import connection
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, schema
@@ -28,10 +30,10 @@ from api.validators import validate_contact_input
 @permission_classes([AllowAny])
 def get_contacts(request: Request) -> Response:
     """Get or delete contacts list data."""
-    query = get_select_contacts_query()
+    query: str = get_select_contacts_query()
     with connection.cursor() as cursor:
         cursor.execute(query)
-        contacts = dictfetchall(cursor)
+        contacts: List[Dict] = dictfetchall(cursor)
     return Response({"contacts": contacts}, status=status.HTTP_200_OK)
 
 
@@ -40,11 +42,11 @@ def get_contacts(request: Request) -> Response:
 @schema(contacts_search_schema)
 def search_contacts(request: Request) -> Response:
     """Get contacts list in accordance with search input."""
-    search_data = request.data.get("search_data")
-    query = get_search_contacts_query(search_data)
+    search_data: str = request.data.get("search_data")
+    query: str = get_search_contacts_query(search_data)
     with connection.cursor() as cursor:
         cursor.execute(query)
-        contacts = dictfetchall(cursor)
+        contacts: List[Dict] = dictfetchall(cursor)
     return Response({"contacts": contacts}, status=status.HTTP_200_OK)
 
 
@@ -52,7 +54,7 @@ def search_contacts(request: Request) -> Response:
 @permission_classes([IsAdminUser])
 def delete_contacts(request: Request) -> Response:
     """Delete all contacts data."""
-    query = get_delete_contacts_query()
+    query: str = get_delete_contacts_query()
     with connection.cursor() as cursor:
         cursor.execute(query)
     return Response({"operation": "successful"}, status=status.HTTP_200_OK)
@@ -63,11 +65,13 @@ def delete_contacts(request: Request) -> Response:
 def contact(request: Request, pk: int) -> Response:
     """Perform read and delete operations with contacts table."""
     if request.method == "GET":
-        query = get_read_single_contact_query(pk)
+        query: str = get_read_single_contact_query(pk)
         with connection.cursor() as cursor:
             cursor.execute(query)
-            data = dictfetchall(cursor) if cursor.description else []
-            result = data[0] if data else dict()
+            data: List[Optional[Dict]] = (
+                dictfetchall(cursor) if cursor.description else []
+            )
+            result: Dict = data[0] if data else dict()
         return Response({"contact": result}, status=status.HTTP_200_OK)
     if request.method == "DELETE":
         query = get_delete_single_contact_query(pk)
@@ -87,12 +91,12 @@ def contact(request: Request, pk: int) -> Response:
 @schema(contact_update_schema)
 def update_contact(request: Request, pk: int) -> Response:
     """Perform update operation with contacts table."""
-    data = request.data
+    data: Dict = request.data
     if not validate_contact_input(data):
         return Response(
             {"Error": "Invalid data"}, status=status.HTTP_406_NOT_ACCEPTABLE
         )
-    query = get_update_single_contact_query(
+    query: str = get_update_single_contact_query(
         pk, data["first_name"], data["last_name"], data["email"]
     )
     with connection.cursor() as cursor:
@@ -105,9 +109,9 @@ def update_contact(request: Request, pk: int) -> Response:
 @schema(contact_create_schema)
 def create_contact(request: Request) -> Response:
     """Create single contact."""
-    data = request.data
+    data: Dict = request.data
     if validate_contact_input(data):
-        query = get_create_single_contact_query(
+        query: str = get_create_single_contact_query(
             data["first_name"], data["last_name"], data["email"]
         )
         with connection.cursor() as cursor:
