@@ -7,6 +7,14 @@ def get_select_contacts_query():
     return "SELECT * FROM contacts"
 
 
+def get_search_contacts_query(search_data: str) -> str:
+    """Get query for searching contacts with full text search."""
+    return (
+        f"SELECT * FROM contacts WHERE make_tsvector(first_name, last_name,"
+        f" email) @@ websearch_to_tsquery('english', '{search_data}');"
+    )
+
+
 def get_insert_contact_query(contact: Dict) -> str:
     """Get query string with SQL statement for creating contact."""
     return (
