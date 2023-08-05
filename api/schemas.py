@@ -42,3 +42,15 @@ contact_update_schema = AutoSchema(
         ),
     ]
 )
+
+
+contacts_search_schema = AutoSchema(
+    manual_fields=[
+        coreapi.Field(
+            name="search_data",
+            required=True,
+            location="form",
+            description="Search string",
+        ),
+    ]
+)
