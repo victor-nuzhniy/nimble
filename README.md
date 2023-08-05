@@ -61,6 +61,8 @@ For work with application, you need to setup your database in docker container. 
     celery -A config beat
 3. To upgrade celery settings run
     celery upgrade settings config/settings.py
+4. To delete task from the queue
+    celery -A config purge
 
 
 ### Performing tests
