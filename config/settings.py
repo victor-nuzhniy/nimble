@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "corsheaders",
+    "django_celery_beat",
+    "django_celery_results",
     "api.apps.ApiConfig",
 ]
 
@@ -138,3 +140,11 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+CELERY_broker_url = str(os.getenv("CELERY_BROKER_REDIS_URL"))
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers.DatabaseScheduler"
+
+CELERY_RESULTS_BACKEND = "django-db"
+
+imports = ("api.tasks",)
