@@ -538,6 +538,21 @@ python-crontab = ">=2.3.4"
 tzdata = "*"
 
 [[package]]
+name = "django-celery-results"
+version = "2.5.1"
+description = "Celery result backends for Django."
+optional = false
+python-versions = "*"
+files = [
+    {file = "django_celery_results-2.5.1-py3-none-any.whl", hash = "sha256:0da4cd5ecc049333e4524a23fcfc3460dfae91aa0a60f1fae4b6b2889c254e01"},
+    {file = "django_celery_results-2.5.1.tar.gz", hash = "sha256:3ecb7147f773f34d0381bac6246337ce4cf88a2ea7b82774ed48e518b67bb8fd"},
+]
+
+[package.dependencies]
+celery = ">=5.2.7,<6.0"
+Django = ">=3.2.18"
+
+[[package]]
 name = "django-cors-headers"
 version = "4.2.0"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
@@ -1599,4 +1614,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "b1d91a95d36dbb7300ce9b893f408064c218755638461eab105ada0356250942"
+content-hash = "610b585bd1378190daca6ed246fd18b4f0b259cf2878ce7097d756b4e85a477c"
