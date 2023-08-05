@@ -6,6 +6,7 @@ from api.views import (
     create_contact,
     delete_contacts,
     get_contacts,
+    search_contacts,
     update_contact,
 )
 
@@ -15,4 +16,5 @@ urlpatterns = [
     path("contact/create/", create_contact),
     path("contact/<int:pk>/", contact),
     path("contact/<int:pk>/update", update_contact),
+    path("contacts/search/", search_contacts),
 ]

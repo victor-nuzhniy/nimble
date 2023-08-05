@@ -11,10 +11,15 @@ from api.queries import (
     get_delete_contacts_query,
     get_delete_single_contact_query,
     get_read_single_contact_query,
+    get_search_contacts_query,
     get_select_contacts_query,
     get_update_single_contact_query,
 )
-from api.schemas import contact_create_schema, contact_update_schema
+from api.schemas import (
+    contact_create_schema,
+    contact_update_schema,
+    contacts_search_schema,
+)
 from api.utils import dictfetchall
 from api.validators import validate_contact_input
 
@@ -24,6 +29,19 @@ from api.validators import validate_contact_input
 def get_contacts(request: Request) -> Response:
     """Get or delete contacts list data."""
     query = get_select_contacts_query()
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        contacts = dictfetchall(cursor)
+    return Response({"contacts": contacts}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@schema(contacts_search_schema)
+def search_contacts(request: Request) -> Response:
+    """Get contacts list in accordance with search input."""
+    search_data = request.data.get("search_data")
+    query = get_search_contacts_query(search_data)
     with connection.cursor() as cursor:
         cursor.execute(query)
         contacts = dictfetchall(cursor)
