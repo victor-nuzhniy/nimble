@@ -99,6 +99,6 @@ class TestUpdateContactsData:
         url = reverse("get_contacts")
         response = client.get(url)
         result = response.json().get("contacts")
-        for i, contact in enumerate(result[-len(contacts) :]):
+        for i, contact in enumerate(result[-len(contacts):]):
             for key, value in contacts[i].items():
                 assert contact[key] == value
