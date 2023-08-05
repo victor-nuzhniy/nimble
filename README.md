@@ -36,13 +36,9 @@ For work with application, you need to setup your database in docker container. 
        CREATE DATABASE nimble;
        \c nimble;
 
-4. Copy content of 1) migrations/main.sql and 2) migrations/data.sql one after another
-      and paste it in previously opened psql terminal.
-      Check that migrations applied successfully.
+4. Change in .env file in root directory value of POSTGRES_DB on nimble
 
-5. Change in .env file in root directory value of POSTGRES_DB on nimble
-
-6. Rebuild docker and up it, use commands:
+5. Rebuild docker and up it, use commands:
 
        docker-compose build --no-cache
        docker-compose up
@@ -63,6 +59,15 @@ For work with application, you need to setup your database in docker container. 
     celery upgrade settings config/settings.py
 4. To delete task from the queue
     celery -A config purge
+
+### Load data into contacts from csv file.
+
+1. To load data from csv file to contacts table, use command
+
+    python manage.py import_contacts_from_csv data/nimble_contacts.csv
+    
+    where last argument is a csv file location.
+
 
 
 ### Performing tests
