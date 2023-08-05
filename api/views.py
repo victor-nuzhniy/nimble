@@ -53,7 +53,7 @@ def search_contacts(request: Request) -> Response:
 @api_view(["DELETE"])
 @permission_classes([IsAdminUser])
 def delete_contacts(request: Request) -> Response:
-    """Delete all contacts data."""
+    """Delete all contacts data. Only for ADMIN."""
     query: str = get_delete_contacts_query()
     with connection.cursor() as cursor:
         cursor.execute(query)
@@ -63,7 +63,7 @@ def delete_contacts(request: Request) -> Response:
 @api_view(["GET", "DELETE"])
 @permission_classes([IsAdminUser])
 def contact(request: Request, pk: int) -> Response:
-    """Perform read and delete operations with contacts table."""
+    """Perform read and delete operations with contacts table. Only for ADMIN."""
     if request.method == "GET":
         query: str = get_read_single_contact_query(pk)
         with connection.cursor() as cursor:
@@ -90,7 +90,7 @@ def contact(request: Request, pk: int) -> Response:
 @permission_classes([IsAdminUser])
 @schema(contact_update_schema)
 def update_contact(request: Request, pk: int) -> Response:
-    """Perform update operation with contacts table."""
+    """Perform update operation with contacts table. Only for ADMIN."""
     data: Dict = request.data
     if not validate_contact_input(data):
         return Response(
@@ -108,7 +108,7 @@ def update_contact(request: Request, pk: int) -> Response:
 @permission_classes([IsAdminUser])
 @schema(contact_create_schema)
 def create_contact(request: Request) -> Response:
-    """Create single contact."""
+    """Create single contact. Only for ADMIN."""
     data: Dict = request.data
     if validate_contact_input(data):
         query: str = get_create_single_contact_query(
