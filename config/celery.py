@@ -7,8 +7,20 @@ from celery import Celery
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
-app = Celery("config")
+app = Celery(
+    "config",
+    broker="redis://127.0.0.1:6379",
+    backend="redis://127.0.0.1:6379",
+    include=["api.tasks"],
+)
 
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
 app.autodiscover_tasks()
+
+app.conf.beat_schedule = {
+    "update_contacts_table_with_api_data": {
+        "task": "api.tasks.run_updating_contacts",
+        "schedule": 60.0,
+    }
+}
