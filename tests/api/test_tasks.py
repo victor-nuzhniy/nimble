@@ -29,7 +29,7 @@ class TestRunUpdatingContacts:
         url = reverse("get_contacts")
         response = client.get(url)
         result = response.json().get("contacts")
-        for i, contact in enumerate(result[-len(contacts) :]):
+        for i, contact in enumerate(result[-len(contacts):]):
             for key, value in contacts[i].items():
                 assert contact[key] == value
 
@@ -55,6 +55,6 @@ class TestRunUpdatingContacts:
         response = client.get(url)
         result = response.json().get("contacts")
 
-        for i, contact in enumerate(result[(3 - len(contacts)):]):
+        for i, contact in enumerate(result[3 - len(contacts):]):
             for key, value in contacts[i + 3].items():
                 assert contact[key] == value
