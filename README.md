@@ -56,7 +56,12 @@ For work with application, you need to setup your database in docker container. 
 ### Celery
 
 1. To run celery use command in terminal
-    celery -A config worker -l info
+    celery -A config worker -l -P solo (-P solo for Windows)
+2. To run beat service use command in terminal
+    celery -A config beat
+3. To upgrade celery settings run
+    celery upgrade settings config/settings.py
+
 
 ### Performing tests
 
