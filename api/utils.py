@@ -17,17 +17,21 @@ def dictfetchall(cursor) -> List[Dict]:
     return [dict(zip(columns, row)) for row in cursor.fetchall()]
 
 
-def create_contact_list(resources: Dict) -> List:
+def create_contact_list(resources: List) -> List:
     """Create dict list with contact data."""
     contacts: List = []
     for resource in resources:
         contact_dict: Dict = dict()
         fields_dict: Dict = resource.get("fields")
-        if first_name_list := fields_dict.get("first name"):
+        if (first_name_list := fields_dict.get("first name")) and isinstance(
+            first_name_list, List
+        ):
             contact_dict["first_name"] = first_name_list[0].get("value")
-        if last_name_list := fields_dict.get("last name"):
+        if (last_name_list := fields_dict.get("last name")) and isinstance(
+            last_name_list, List
+        ):
             contact_dict["last_name"] = last_name_list[0].get("value")
-        if email_list := fields_dict.get("email"):
+        if (email_list := fields_dict.get("email")) and isinstance(email_list, List):
             contact_dict["email"] = email_list[0].get("value")
         if contact_dict:
             contacts.append(contact_dict)
