@@ -23,7 +23,7 @@ class TestImportContactFromCsv:
         response = client.get(reverse("get_contacts"))
         contacts: List[Dict] = response.json().get("contacts")
         with open("data/nimble_contacts.csv", mode="r") as file:
-            reader = csv.DictReader(file)
+            reader: csv.DictReader = csv.DictReader(file)
             for i, row_dict in enumerate(reader):
                 assert row_dict["first name"] == contacts[i]["first_name"]
                 assert row_dict["last name"] == contacts[i]["last_name"]

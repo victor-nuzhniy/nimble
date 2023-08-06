@@ -44,7 +44,7 @@ class TestSearchView:
                     f"'{contact.get('last_name')}', '{contact.get('email')}');"
                 )
                 cursor.execute(query)
-        url = reverse("search_contact")
+        url: str = reverse("search_contact")
         form_data = {
             "search_data": f"{contacts[2].get('first_name')} or "
             f"{contacts[1].get('last_name')} or "
@@ -52,7 +52,7 @@ class TestSearchView:
         }
         response = client.post(url, form_data)
         assert response.status_code == 200
-        result = response.json().get("contacts")
+        result: List = response.json().get("contacts")
         for i, contact in enumerate(contacts):
             for key, value in contact.items():
                 assert result[i][key] == value
@@ -71,10 +71,10 @@ class TestGetContacts:
     ) -> None:
         """Test get_contacts."""
         contacts: List[Dict] = fill_contacts_table_with_data
-        url = reverse("get_contacts")
+        url: str = reverse("get_contacts")
         response = client.get(url)
         assert response.status_code == 200
-        result = response.json().get("contacts")
+        result: List = response.json().get("contacts")
         for i, contact in enumerate(contacts):
             for key, value in contact.items():
                 assert result[i][key] == value
@@ -94,17 +94,17 @@ class TestDeleteContacts:
         client: Client,
     ) -> None:
         """Test delete_contacts."""
-        user = django_user_model.objects.create_superuser(
+        user: User = django_user_model.objects.create_superuser(
             username="test", email="test@gmail.com", password="password"
         )
-        url = reverse("delete_contacts")
+        url: str = reverse("delete_contacts")
         request = rf.delete(url)
         token, created = Token.objects.get_or_create(user=user)
         force_authenticate(request, user, token)
         response = delete_contacts(request)
         assert response.status_code == 200
         response = client.get(reverse("get_contacts"))
-        result = response.json().get("contacts")
+        result: List = response.json().get("contacts")
         assert not result
         assert isinstance(result, List)
 
@@ -125,19 +125,19 @@ class TestContact:
         """Test contact get functionality."""
         contacts: List[Dict] = fill_contacts_table_with_data
         index: int = faker.random_int(min=1, max=len(contacts))
-        user = django_user_model.objects.create_superuser(
+        user: User = django_user_model.objects.create_superuser(
             username="test", email="test@gmail.com", password="password"
         )
         help_response = client.get(reverse("get_contacts"))
-        result_contacts = help_response.json().get("contacts")
+        result_contacts: List = help_response.json().get("contacts")
         first_id: int = result_contacts[0].get("contact_id")
-        pk = first_id + index - 1
-        url = reverse("contact", kwargs={"pk": pk})
+        pk: int = first_id + index - 1
+        url: str = reverse("contact", kwargs={"pk": pk})
         token, created = Token.objects.get_or_create(user=user)
-        headers = {"Authorization": f"Token {token.key}"}
+        headers: Dict = {"Authorization": f"Token {token.key}"}
         response = client.get(url, headers=headers)
         assert response.status_code == 200
-        result = response.json().get("contact")
+        result: Dict = response.json().get("contact")
         for key, value in contacts[index - 1].items():
             assert result[key] == value
 
@@ -151,22 +151,22 @@ class TestContact:
         """Test contact delete functionality."""
         contacts: List[Dict] = fill_contacts_table_with_data
         index: int = faker.random_int(min=1, max=len(contacts))
-        user = django_user_model.objects.create_superuser(
+        user: User = django_user_model.objects.create_superuser(
             username="test", email="test@gmail.com", password="password"
         )
         help_response = client.get(reverse("get_contacts"))
-        result_contacts = help_response.json().get("contacts")
+        result_contacts: List = help_response.json().get("contacts")
         first_id: int = result_contacts[0].get("contact_id")
-        pk = first_id + index - 1
-        url = reverse("contact", kwargs={"pk": pk})
+        pk: int = first_id + index - 1
+        url: str = reverse("contact", kwargs={"pk": pk})
         token, created = Token.objects.get_or_create(user=user)
-        headers = {"Authorization": f"Token {token.key}"}
+        headers: Dict = {"Authorization": f"Token {token.key}"}
         response = client.delete(url, headers=headers)
         contacts = contacts[: index - 1] + contacts[index:]
         help_response = client.get(reverse("get_contacts"))
         result_contacts = help_response.json().get("contacts")
         assert response.status_code == 200
-        result = response.json().get("result")
+        result: str = response.json().get("result")
         assert result == "Successfully deleted contact."
         for i, contact in enumerate(contacts):
             for key, value in contact.items():
@@ -189,7 +189,7 @@ class TestUpdateContact:
         """Test update_contact."""
         contacts: List[Dict] = fill_contacts_table_with_data
         index: int = faker.random_int(min=1, max=len(contacts))
-        user = django_user_model.objects.create_superuser(
+        user: User = django_user_model.objects.create_superuser(
             username="test", email="test@gmail.com", password="password"
         )
         new_data: Dict = {
@@ -198,12 +198,12 @@ class TestUpdateContact:
             "email": faker.email(),
         }
         help_response = client.get(reverse("get_contacts"))
-        result_contacts = help_response.json().get("contacts")
+        result_contacts: List = help_response.json().get("contacts")
         first_id: int = result_contacts[0].get("contact_id")
-        pk = first_id + index - 1
-        url = reverse("update_contact", kwargs={"pk": pk})
+        pk: int = first_id + index - 1
+        url: str = reverse("update_contact", kwargs={"pk": pk})
         token, created = Token.objects.get_or_create(user=user)
-        headers = {"Authorization": f"Token {token.key}"}
+        headers: Dict = {"Authorization": f"Token {token.key}"}
         response = client.put(
             url,
             headers=headers,
@@ -213,7 +213,7 @@ class TestUpdateContact:
         help_response = client.get(
             reverse("contact", kwargs={"pk": pk}), headers=headers
         )
-        result_contact = help_response.json().get("contact")
+        result_contact: Dict = help_response.json().get("contact")
         assert response.status_code == 200
         result = response.json().get("result")
         assert result == "Successfully updated contact."
@@ -236,7 +236,7 @@ class TestCreateContact:
         faker: Faker,
     ) -> None:
         """Test create_contact."""
-        user = django_user_model.objects.create_superuser(
+        user: User = django_user_model.objects.create_superuser(
             username="test", email="test@gmail.com", password="password"
         )
         new_data: Dict = {
@@ -245,13 +245,13 @@ class TestCreateContact:
             "email": faker.email(),
         }
         token, created = Token.objects.get_or_create(user=user)
-        headers = {"Authorization": f"Token {token.key}"}
-        url = reverse("create_contact")
+        headers: Dict = {"Authorization": f"Token {token.key}"}
+        url: str = reverse("create_contact")
         response = client.post(url, headers=headers, data=new_data)
         help_response = client.get(reverse("get_contacts"))
-        result_contact = help_response.json().get("contacts")[-1]
+        result_contact: Dict = help_response.json().get("contacts")[-1]
         assert response.status_code == 200
-        result = response.json().get("result")
+        result: str = response.json().get("result")
         assert result == "Contact was created."
         for key, value in new_data.items():
             assert result_contact[key] == value
@@ -264,7 +264,7 @@ class TestCreateContact:
         faker: Faker,
     ) -> None:
         """Test create_contact."""
-        user = django_user_model.objects.create_superuser(
+        user: User = django_user_model.objects.create_superuser(
             username="test", email="test@gmail.com", password="password"
         )
         new_data: Dict = {
@@ -273,9 +273,9 @@ class TestCreateContact:
             "email": faker.email(),
         }
         token, created = Token.objects.get_or_create(user=user)
-        headers = {"Authorization": f"Token {token.key}"}
-        url = reverse("create_contact")
+        headers: Dict = {"Authorization": f"Token {token.key}"}
+        url: str = reverse("create_contact")
         response = client.post(url, headers=headers, data=new_data)
         assert response.status_code == 406
-        result = response.json().get("Error")
+        result: str = response.json().get("Error")
         assert result == "Invalid data."
