@@ -101,7 +101,9 @@ def update_contact(request: Request, pk: int) -> Response:
     )
     with connection.cursor() as cursor:
         cursor.execute(query)
-    return Response({"result": "Successfully added data."}, status=status.HTTP_200_OK)
+    return Response(
+        {"result": "Successfully updated contact."}, status=status.HTTP_200_OK
+    )
 
 
 @api_view(["POST"])
@@ -116,5 +118,5 @@ def create_contact(request: Request) -> Response:
         )
         with connection.cursor() as cursor:
             cursor.execute(query)
-        return Response({"response": "object created"}, status=status.HTTP_200_OK)
-    return Response({"error": "Invalid data"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        return Response({"result": "Contact was created."}, status=status.HTTP_200_OK)
+    return Response({"Error": "Invalid data."}, status=status.HTTP_406_NOT_ACCEPTABLE)
