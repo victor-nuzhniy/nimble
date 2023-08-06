@@ -1,6 +1,7 @@
 """Pytest fixtures for 'API' project."""
 
 import random
+from typing import Dict, List
 
 import pytest
 from django.db import connection
@@ -14,14 +15,26 @@ def faker_seed() -> None:
 
 
 @pytest.fixture
-def fill_contacts_table_with_data(faker: Faker) -> None:
+def fill_contacts_table_with_data(faker: Faker) -> List[Dict]:
     """Fill test db with fake data."""
+    result: List = []
     with connection.cursor() as cursor:
         for _ in range(30):
+            first_name: str = faker.first_name()
+            last_name: str = faker.last_name()
+            email: str = faker.email()
             query = (
                 f"INSERT INTO contacts (first_name, last_name, email) "
-                f"VALUES ('{faker.first_name()}', "
-                f"'{faker.last_name()}', "
-                f"'{faker.email()}');"
+                f"VALUES ('{first_name}', "
+                f"'{last_name}', "
+                f"'{email}');"
             )
             cursor.execute(query)
+            result.append(
+                {
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "email": email,
+                }
+            )
+    return result
