@@ -1,5 +1,45 @@
 # nimble api
 
+## Description
+    
+1. The project created in accordance with test backend task
+    https://docs.google.com/document/d/1kal62ycDv548fS0B-eAc4I8E93snzd8PtnNAcDD7BrE/edit?pli=1
+2. Django framework was used as a backend creating API.
+3. Celery and redis are used for creation updating contacts table once in 24 hours.
+4. API for fetching updating data is https://api.nimble.com/api/v1/contacts
+5. ORM is not used in the project.
+6. Postgress fulltext search is used for fetching data from the table.
+7. Fulltext search is implemented with 'websearch_to_tsquery' function. That suppose to
+    perform:
+        - "alex" - searching for 'alex' in all table contacts fields as a separete word 
+             case insensetive;
+        - "alex man" searching for 'alex man' combination of words in order they are;
+        - "alex or ken" - searching for 'alex' or 'ken' words, both and separate
+            in all fields.
+        - for more info go https://www.postgresql.org/docs/current/functions-textsearch.html
+            "websearch_to_tsquery" function.
+8. Search API endpoint is on 'http://localhost:8000/api/contacts/search', request with 
+    POST method. Example:
+        url = 'http://127.0.0.1:8000/api/contacts/search/'
+
+        response = requests.post(
+            url=url,
+            headers={"Content-Type": "application/json"},
+            json={"search_data": "oleg or ken or kari"}
+        )
+9. '127.0.0.1:8000' or 'locashost:8000' is used in case of local running. External link
+    will be given separately.
+10. Given API has its documentation, link 'http://localhost:8000/' in case of local running.
+    It has several endpoints for technical usage, some of them can be accessed authorized
+    as an admin:
+        - '/contacts/' - get all tables contacts, without any authentification;
+        - '/contacts/delete/' - delete all contacts, user must be admin;
+        - '/contact/create/' - create single contact, user must be admin;
+        - '/contact/{int:pk}/' - get and delete contact, user must be admin;
+        - '/contact/{int:pk}/update/' - update contact, user must be admin;
+        - '/contacts/search/' - search contacts with an input string, without any auth.
+11. User registration can be performed in Django 'admin' section.
+
 ## Development
 
 1. Create in the project root (or obtain from team member) an `.env` file with 
@@ -10,6 +50,7 @@
 1. Pre-commit hook installed, settings are in .pre-commit-config.yaml
 2. To instantiate new hook settings change .pre-commit-config.yaml file
      and run     pre-commit install
+3. To bypass hook checking run      git commit -m "..." --no-verify
 
 ### Local run in docker container using docker-compose
 
