@@ -12,7 +12,7 @@ from api.views import (
 
 urlpatterns = [
     path("contacts/", get_contacts, name="get_contacts"),
-    path("contacts/delete/", delete_contacts, name="delete_contact"),
+    path("contacts/delete/", delete_contacts, name="delete_contacts"),
     path("contact/create/", create_contact, name="create_contact"),
     path("contact/<int:pk>/", contact, name="contact"),
     path("contact/<int:pk>/update", update_contact, name="update_contact"),

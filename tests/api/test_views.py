@@ -1,11 +1,16 @@
 """Module for testing api views."""
-from typing import List
+from typing import Dict, List
 
 import pytest
 from django.db import connection
-from django.test import Client
+from django.test import Client, RequestFactory
 from django.urls import reverse
 from faker import Faker
+from rest_framework.authtoken.admin import User
+from rest_framework.authtoken.models import Token
+from rest_framework.test import force_authenticate
+
+from api.views import delete_contacts
 
 
 @pytest.mark.django_db
@@ -17,7 +22,7 @@ class TestSearchView:
     def test_search_view(
         self,
         client: Client,
-        fill_contacts_table_with_data: None,
+        fill_contacts_table_with_data: List[Dict],
         faker: Faker,
     ) -> None:
         """Test search_view."""
@@ -50,3 +55,54 @@ class TestSearchView:
         for i, contact in enumerate(contacts):
             for key, value in contact.items():
                 assert result[i][key] == value
+
+
+@pytest.mark.django_db
+class TestGetContacts:
+    """Class for testing get_contacts."""
+
+    pytestmark = pytest.mark.django_db
+
+    def test_get_contacts(
+        self,
+        fill_contacts_table_with_data: List[Dict],
+        client: Client,
+    ) -> None:
+        """Test get_contacts."""
+        contacts: List[Dict] = fill_contacts_table_with_data
+        url = reverse("get_contacts")
+        response = client.get(url)
+        assert response.status_code == 200
+        result = response.json().get("contacts")
+        for i, contact in enumerate(contacts):
+            for key, value in contact.items():
+                assert result[i][key] == value
+
+
+@pytest.mark.django_db
+class TestDeleteContacts:
+    """Class for testing delete_contacts."""
+
+    pytestmark = pytest.mark.django_db
+
+    def test_delete_contacts(
+        self,
+        fill_contacts_table_with_data: List[Dict],
+        rf: RequestFactory,
+        django_user_model: User,
+        client: Client,
+    ) -> None:
+        """Test delete_contacts."""
+        user = django_user_model.objects.create_superuser(
+            username="test", email="test@gmail.com", password="password"
+        )
+        url = reverse("delete_contacts")
+        request = rf.delete(url)
+        token = Token.objects.get_or_create(user=user)[0]
+        force_authenticate(request, user, token)
+        response = delete_contacts(request)
+        assert response.status_code == 200
+        response = client.get(reverse("get_contacts"))
+        result = response.json().get("contacts")
+        assert not result
+        assert isinstance(result, List)
