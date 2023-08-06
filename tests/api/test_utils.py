@@ -90,7 +90,7 @@ class TestUpdateContactsData:
     def test_update_contacts_data(
         self,
         create_fake_contacts_list: List[Dict],
-        fill_contacts_table_with_data: None,
+        fill_contacts_table_with_data: List[Dict],
         client: Client,
     ) -> None:
         """Test update_contacts_data."""

@@ -18,7 +18,7 @@ class TestRunUpdatingContacts:
 
     def test_run_updating_contacts_inserting(
         self,
-        fill_contacts_table_with_data: None,
+        fill_contacts_table_with_data: List[Dict],
         get_nimble_data: List[Dict],
         client: Client,
         faker: Faker,
@@ -35,7 +35,7 @@ class TestRunUpdatingContacts:
 
     def test_run_updating_contacts_updating(
         self,
-        fill_contacts_table_with_data: None,
+        fill_contacts_table_with_data: List[Dict],
         get_nimble_data: List[Dict],
         client: Client,
         faker: Faker,
