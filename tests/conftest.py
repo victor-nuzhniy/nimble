@@ -21,7 +21,7 @@ def fill_contacts_table_with_data(faker: Faker) -> List[Dict]:
     with connection.cursor() as cursor:
         for _ in range(30):
             first_name: str = faker.first_name()
-            last_name: str = faker.last_name()
+            last_name: str = faker.pystr(min_chars=10, max_chars=100)
             email: str = faker.email()
             query = (
                 f"INSERT INTO contacts (first_name, last_name, email) "
