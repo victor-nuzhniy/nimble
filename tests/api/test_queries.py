@@ -22,7 +22,7 @@ class TestGetSelectContactsQuery:
     def test_get_select_contacts_query(self) -> None:
         """Test get_select_contacts_query."""
         result: str = get_select_contacts_query()
-        assert result == "SELECT * FROM contacts"
+        assert result == "SELECT * FROM contacts ORDER BY contact_id ASC;"
 
 
 class TestGetSearchContactsQuery:

@@ -4,7 +4,7 @@ from typing import Dict
 
 def get_select_contacts_query():
     """Get query for retrievnig all contacts."""
-    return "SELECT * FROM contacts"
+    return "SELECT * FROM contacts ORDER BY contact_id ASC;"
 
 
 def get_search_contacts_query(search_data: str) -> str:
