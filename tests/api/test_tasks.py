@@ -26,10 +26,10 @@ class TestRunUpdatingContacts:
         """Test run_updating_contacts."""
         contacts: List[Dict] = get_nimble_data
         run_updating_contacts()
-        url = reverse("get_contacts")
+        url: str = reverse("get_contacts")
         response = client.get(url)
-        result = response.json().get("contacts")
-        for i, contact in enumerate(result[-len(contacts):]):
+        result: List = response.json().get("contacts")
+        for i, contact in enumerate(result[-len(contacts) :]):
             for key, value in contacts[i].items():
                 assert contact[key] == value
 
@@ -51,10 +51,10 @@ class TestRunUpdatingContacts:
                 )
                 cursor.execute(query)
         run_updating_contacts()
-        url = reverse("get_contacts")
+        url: str = reverse("get_contacts")
         response = client.get(url)
-        result = response.json().get("contacts")
+        result: List = response.json().get("contacts")
 
-        for i, contact in enumerate(result[3 - len(contacts):]):
+        for i, contact in enumerate(result[3 - len(contacts) :]):
             for key, value in contacts[i + 3].items():
                 assert contact[key] == value

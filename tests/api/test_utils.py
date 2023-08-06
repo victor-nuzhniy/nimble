@@ -22,12 +22,12 @@ class TestDictfetchall:
         client: Client,
     ) -> None:
         """Test dictfetchall."""
-        url = reverse("get_contacts")
+        url: str = reverse("get_contacts")
         response = client.get(url)
-        response = response.json().get("contacts")
+        response: List = response.json().get("contacts")
         with connection.cursor() as cursor:
             cursor.execute(get_select_contacts_query())
-            result = dictfetchall(cursor)
+            result: List = dictfetchall(cursor)
         for i, contact in enumerate(response):
             for key, value in result[i].items():
                 assert contact[key] == value
@@ -42,7 +42,7 @@ class TestCreateContactList:
     ) -> None:
         """Test create_contact_list."""
         input_list, output_list = create_fake_contacts_lists_with_diff_keys
-        result = create_contact_list(input_list)
+        result: List = create_contact_list(input_list)
         for i, contact in enumerate(output_list):
             for key, value in result[i].items():
                 assert contact[key] == value
@@ -60,7 +60,7 @@ class TestCreateContactList:
                 }
             }
         ]
-        result = create_contact_list(input_list)
+        result: List = create_contact_list(input_list)
         assert not result
         assert isinstance(result, List)
 
@@ -75,7 +75,7 @@ class TestCreateContactList:
                 }
             }
         ]
-        result = create_contact_list(input_list)
+        result: List = create_contact_list(input_list)
         assert result[0]["first_name"] is None
         assert result[0]["last_name"] is None
         assert result[0]["email"] is None
@@ -96,9 +96,9 @@ class TestUpdateContactsData:
         """Test update_contacts_data."""
         contacts: List[Dict] = create_fake_contacts_list
         update_contacts_data(contacts)
-        url = reverse("get_contacts")
+        url: str = reverse("get_contacts")
         response = client.get(url)
-        result = response.json().get("contacts")
-        for i, contact in enumerate(result[-len(contacts):]):
+        result: List = response.json().get("contacts")
+        for i, contact in enumerate(result[-len(contacts) :]):
             for key, value in contacts[i].items():
                 assert contact[key] == value
